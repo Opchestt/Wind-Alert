@@ -1,0 +1,36 @@
+name: 風速通知
+
+on:
+  schedule:
+    # 每 15 分鐘檢查一次（GitHub 尖峰時段可能會延遲幾分鐘）
+    # 如果 repo 設成 private，請改成 "*/30 * * * *" 以免超過每月 2,000 分鐘免費額度
+    - cron: "*/15 * * * *"
+  workflow_dispatch:
+    inputs:
+      test:
+        description: "送一則測試通知（不管風速有沒有超標）"
+        type: boolean
+        default: false
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 檢查風速
+        run: python3 wind_alert.py
+        env:
+          # 機密資料（Settings → Secrets and variables → Actions → Secrets）
+          CWA_API_KEY: ${{ secrets.CWA_API_KEY }}
+          NTFY_TOPIC: ${{ secrets.NTFY_TOPIC }}
+          LAT: ${{ secrets.LAT }}
+          LON: ${{ secrets.LON }}
+          # 可隨時修改的門檻（Settings → Secrets and variables → Actions → Variables）
+          WIND_THRESHOLD: ${{ vars.WIND_THRESHOLD }}
+          GUST_THRESHOLD: ${{ vars.GUST_THRESHOLD }}
+          FORECAST_HOURS: ${{ vars.FORECAST_HOURS }}
+          COOLDOWN_HOURS: ${{ vars.COOLDOWN_HOURS }}
+          CWA_STATION_NAME: ${{ vars.CWA_STATION_NAME }}
+          TEST_NOTIFY: ${{ inputs.test && '1' || '' }}
