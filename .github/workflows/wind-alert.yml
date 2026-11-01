@@ -32,5 +32,6 @@ jobs:
           GUST_THRESHOLD: ${{ vars.GUST_THRESHOLD }}
           FORECAST_HOURS: ${{ vars.FORECAST_HOURS }}
           COOLDOWN_HOURS: ${{ vars.COOLDOWN_HOURS }}
+          STATUS_HOURS: ${{ vars.STATUS_HOURS }}
           CWA_STATION_NAME: ${{ vars.CWA_STATION_NAME }}
           TEST_NOTIFY: ${{ inputs.test && '1' || '' }}
