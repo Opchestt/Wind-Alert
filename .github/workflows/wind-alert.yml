@@ -4,7 +4,7 @@ on:
   schedule:
     # 每 15 分鐘檢查一次（GitHub 尖峰時段可能會延遲幾分鐘）
     # 如果 repo 設成 private，請改成 "*/30 * * * *" 以免超過每月 2,000 分鐘免費額度
-    - cron: "*/15 * * * *"
+    - cron: "7,22,37,52 * * * *"
   workflow_dispatch:
     inputs:
       test:
