@@ -33,5 +33,8 @@ jobs:
           FORECAST_HOURS: ${{ vars.FORECAST_HOURS }}
           COOLDOWN_HOURS: ${{ vars.COOLDOWN_HOURS }}
           STATUS_HOURS: ${{ vars.STATUS_HOURS }}
+          RAIN_THRESHOLD: ${{ vars.RAIN_THRESHOLD }}
+          RAIN_PROB_THRESHOLD: ${{ vars.RAIN_PROB_THRESHOLD }}
+          RAIN_COOLDOWN_HOURS: ${{ vars.RAIN_COOLDOWN_HOURS }}
           CWA_STATION_NAME: ${{ vars.CWA_STATION_NAME }}
           TEST_NOTIFY: ${{ inputs.test && '1' || '' }}
