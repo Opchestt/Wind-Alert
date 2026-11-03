@@ -229,6 +229,25 @@ def fmt_rain(r):
     return rain + prob
 
 
+def observation_text(obs):
+    """風大通知最上面的「現在」區塊：不管有沒有超標都列出觀測值，超標的加 ⚠️。"""
+    if not obs:
+        return "現在：沒抓到氣象署觀測資料"
+    t = obs["time"][11:16] if len(obs["time"]) >= 16 else obs["time"]
+
+    def item(label, value, threshold):
+        if value is None:
+            return f"  {label} 無資料"
+        mark = " ⚠️" if value >= threshold else ""
+        return f"  {label} {fmt(value)}{mark}"
+
+    return "\n".join([
+        f"現在（{obs['station']}站 {t}）",
+        item("平均", obs["wind"], WIND_THRESHOLD),
+        item("陣風", obs["gust"], GUST_THRESHOLD),
+    ])
+
+
 # ---------- ntfy ----------
 
 def get_history():
@@ -307,7 +326,8 @@ def main():
         return 0
 
     history = get_history()
-    wind_reasons = check_observation(obs) + check_forecast(forecast)
+    forecast_reasons = check_forecast(forecast)
+    wind_reasons = check_observation(obs) + forecast_reasons
     rain_reasons = check_rain(forecast)
 
     # 風和雨各自判斷、各自冷卻，互不影響
@@ -315,7 +335,8 @@ def main():
         if sent_within(history, [ALERT_TAG], COOLDOWN_HOURS):
             print(f"風速超過門檻，但 {COOLDOWN_HOURS} 小時內已通知過，這次不重複通知")
         else:
-            message = "\n".join(wind_reasons)
+            # 現在的觀測值一定列出，下面再接超標的預報時段
+            message = "\n".join([observation_text(obs)] + forecast_reasons)
             print("風速超過門檻，送出通知：\n" + message)
             send_ntfy("💨 風大注意", message, priority=4, tags=["dash", ALERT_TAG])
 
