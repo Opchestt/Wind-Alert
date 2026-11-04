@@ -51,7 +51,7 @@ WIND_THRESHOLD = env_float("WIND_THRESHOLD", 8.0)    # 平均風速門檻（m/s�
 GUST_THRESHOLD = env_float("GUST_THRESHOLD", 13.9)   # 陣風門檻（m/s），13.9 = 7 級
 FORECAST_HOURS = int(env_float("FORECAST_HOURS", 3))  # 往後看幾小時的預報
 COOLDOWN_HOURS = int(env_float("COOLDOWN_HOURS", 3))  # 通知過後幾小時內不重複通知
-STATUS_HOURS = int(env_float("STATUS_HOURS", 2))      # 幾小時沒任何通知就送定時回報（0 = 關閉）
+STATUS_HOURS = int(env_float("STATUS_HOURS", 3))      # 幾小時沒任何通知就送定時回報（0 = 關閉）
 
 # 下雨通知：預報某小時雨量 ≥ RAIN_THRESHOLD 且降雨機率 ≥ RAIN_PROB_THRESHOLD 才通知
 # 1 mm/h 大約是「不撐傘會淋濕」的程度；毛毛雨通常 < 0.5 mm/h
